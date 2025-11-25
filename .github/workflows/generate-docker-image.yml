@@ -1,52 +1,46 @@
-name: Generate Docker Image
+name: Docker Publish
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
-      - dev
+    branches: [ "main", "dev" ]
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: liammorgan/homepage
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
-    name: Docker Build & Push
-    if: github.repository == 'LiamMorgan/homepage'
-    runs-on: self-hosted
+  build-and-push:
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Next.js build cache
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install pnpm dependencies (build cache)
         uses: actions/cache@v4
         with:
-          path: .next/cache
-          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx') }}
+          path: |
+            ~/.pnpm-store
+            node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+            pnpm-${{ runner.os }}-
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          version: 10
-          run_install: false
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker metadata
         id: meta
@@ -54,51 +48,19 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
+            # Release tags like v1.2.3
             type=ref,event=tag
-            type=sha
-            type=schedule
-
-      - name: Build app
-        run: |
-          NEXT_PUBLIC_BUILDTIME="${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}" \
-          NEXT_PUBLIC_VERSION="${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}" \
-          NEXT_PUBLIC_REVISION="${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}" \
-          pnpm run build
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3.7.0
-
-      - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@v3
+            # main branch → latest
+            type=raw,value=latest,enable={{ startsWith(github.ref, 'refs/heads/main') }}
+            # dev branch → dev
+            type=raw,value=dev,enable={{ startsWith(github.ref, 'refs/heads/dev') }}
 
       - name: Build and push Docker image
-        id: build-and-push
         uses: docker/build-push-action@v6
         with:
           context: .
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            CI=true
-            BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
-            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-            REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
-          platforms: linux/amd64,linux/arm64
-          provenance: false
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
