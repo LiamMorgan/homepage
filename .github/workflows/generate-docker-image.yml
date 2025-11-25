@@ -23,30 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Enable pnpm
-        run: corepack enable
-
-      - name: Cache pnpm modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Next.js (standalone)
-        run: |
-          NEXT_TELEMETRY_DISABLED=1 \
-          NEXT_PUBLIC_BUILDTIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-          NEXT_PUBLIC_VERSION="${{ github.ref_name }}" \
-          NEXT_PUBLIC_REVISION="${{ github.sha }}" \
-          pnpm build
-
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -60,8 +36,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            # version tags (v1.2.3)
             type=ref,event=tag
+            # main branch → latest
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            # dev branch → dev
             type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
 
       - name: Build and push Docker image
@@ -72,9 +51,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            CI=true
             BUILDTIME=${{ github.run_started_at }}
             VERSION=${{ github.ref_name }}
             REVISION=${{ github.sha }}
+            CI=false
           cache-from: type=gha
           cache-to: type=gha,mode=max
