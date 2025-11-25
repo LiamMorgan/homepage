@@ -37,10 +37,9 @@ jobs:
             pnpm-${{ runner.os }}-
 
       - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
-      - name: Build Next.js (standalone output)
+      - name: Build Next.js (standalone)
         run: |
           NEXT_TELEMETRY_DISABLED=1 \
           NEXT_PUBLIC_BUILDTIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
@@ -62,8 +61,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=tag
-            type=raw,value=latest,enable={{ startsWith(github.ref, 'refs/heads/main') }}
-            type=raw,value=dev,enable={{ startsWith(github.ref, 'refs/heads/dev') }}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
