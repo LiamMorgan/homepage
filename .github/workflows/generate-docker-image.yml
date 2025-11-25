@@ -36,11 +36,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # version tags (v1.2.3)
+            # When pushing a Git tag like v1.2.3
             type=ref,event=tag
-            # main branch → latest
+
+            # If pushing to main → latest
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            # dev branch → dev
+
+            # If pushing to dev → dev
             type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
 
       - name: Build and push Docker image
@@ -51,9 +53,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
+            CI=false
             BUILDTIME=${{ github.run_started_at }}
             VERSION=${{ github.ref_name }}
             REVISION=${{ github.sha }}
-            CI=false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
