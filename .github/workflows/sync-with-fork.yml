@@ -2,8 +2,8 @@ name: Sync Fork With Upstream
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Every day at midnight UTC
-  workflow_dispatch: # Allow manual sync on demand
+    - cron: "0 0 * * *" # Daily at midnight UTC
+  workflow_dispatch: # Manual trigger
 
 permissions:
   contents: write
@@ -21,15 +21,42 @@ jobs:
       - name: Add upstream remote (parent repo)
         run: |
           git remote add upstream https://github.com/gethomepage/homepage.git
-          git fetch upstream
+          git fetch upstream --prune
 
-      - name: Fast-forward your main from upstream/main
+      #####################################################
+      # Sync MAIN
+      #####################################################
+      - name: Fast-forward main from upstream/main
+        continue-on-error: true
         run: |
-          git checkout main
-          git merge upstream/main --ff-only || echo "Already up to date"
+          if git rev-parse --verify upstream/main >/dev/null 2>&1; then
+            git checkout main
+            git merge upstream/main --ff-only || echo "main already up to date"
+          else
+            echo "Upstream main not found"
+          fi
 
-      - name: Push updated main back to your fork
+      - name: Push updated main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin main
+          git push origin main || echo "Nothing to push for main"
+
+      #####################################################
+      # Sync DEV
+      #####################################################
+      - name: Fast-forward dev from upstream/dev
+        continue-on-error: true
+        run: |
+          if git rev-parse --verify upstream/dev >/dev/null 2>&1; then
+            git checkout dev
+            git merge upstream/dev --ff-only || echo "dev already up to date"
+          else
+            echo "Upstream dev branch does not exist. Skipping."
+          fi
+
+      - name: Push updated dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin dev || echo "Nothing to push for dev"
