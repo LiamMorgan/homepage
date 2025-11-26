@@ -318,6 +318,9 @@
         "missing": "Missing",
         "lastRun": "Last Run"
     },
+    "anchorr": {
+        "status": "Status"
+    },
     "suwayomi": {
       "download": "Downloaded",
       "nondownload": "Non-Downloaded",

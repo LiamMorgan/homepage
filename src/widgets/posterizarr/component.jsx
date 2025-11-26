@@ -1,6 +1,5 @@
 import Block from "components/services/widget/block";
 import Container from "components/services/widget/container";
-
 import useWidgetAPI from "utils/proxy/use-widget-api";
 
 const fieldNames = {
@@ -105,9 +104,6 @@ const formatMissingResult = (result) => {
 
 const formatLastRunResult = (result) => {
   const lastRunTimestamp = result?.history[0]?.timestamp;
-
-  console.log('result: ', result);
-  console.log('lastRunTimestamp: ', lastRunTimestamp);
 
   if (!lastRunTimestamp) {
     return "Unknown";
