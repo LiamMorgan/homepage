@@ -27,7 +27,7 @@ jobs:
 
       - name: Add upstream remote
         run: |
-          git remote add upstream https://github.com/LiamMorgan/homepage/tree/main
+          git remote add upstream https://github.com/gethomepage/homepage.git
           git fetch upstream
 
       - name: Fast-forward merge upstream/main into main
