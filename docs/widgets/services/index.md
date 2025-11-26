@@ -149,6 +149,7 @@ You can also find a list of all available service widgets in the sidebar navigat
 - [Vikunja](vikunja.md)
 - [Wallos](wallos.md)
 - [Watchtower](watchtower.md)
+- [Wizarr](wizarr.md)
 - [WGEasy](wgeasy.md)
 - [WhatsUpDocker](whatsupdocker.md)
 - [xTeVe](xteve.md)

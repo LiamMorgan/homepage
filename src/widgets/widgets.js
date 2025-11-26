@@ -142,6 +142,7 @@ import wallos from "./wallos/widget";
 import watchtower from "./watchtower/widget";
 import wgeasy from "./wgeasy/widget";
 import whatsupdocker from "./whatsupdocker/widget";
+import wizarr from "./wizarr/widget";
 import xteve from "./xteve/widget";
 import yourspotify from "./yourspotify/widget";
 import zabbix from "./zabbix/widget";
@@ -294,6 +295,7 @@ const widgets = {
   wallos,
   watchtower,
   wgeasy,
+  wizarr,
   whatsupdocker,
   xteve,
   yourspotify,

@@ -150,6 +150,7 @@ const components = {
   wallos: dynamic(() => import("./wallos/component")),
   watchtower: dynamic(() => import("./watchtower/component")),
   wgeasy: dynamic(() => import("./wgeasy/component")),
+  wizarr: dynamic(() => import("./wizarr/component")),
   whatsupdocker: dynamic(() => import("./whatsupdocker/component")),
   xteve: dynamic(() => import("./xteve/component")),
   yourspotify: dynamic(() => import("./yourspotify/component")),

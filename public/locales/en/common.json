@@ -321,6 +321,11 @@
     "anchorr": {
         "status": "Status"
     },
+    "wizarr": {
+        "invites": "Invites",
+        "accepted": "Accepted",
+        "expired": "Expired"
+    },
     "suwayomi": {
       "download": "Downloaded",
       "nondownload": "Non-Downloaded",
