@@ -1,10 +1,9 @@
-name: Sync fork with upstream
+name: Sync Fork With Upstream
 
 on:
   schedule:
-    # Every day at 00:00 UTC
-    - cron: "0 0 * * *"
-  workflow_dispatch:
+    - cron: "0 0 * * *" # Every day at midnight UTC
+  workflow_dispatch: # Allow manual sync on demand
 
 permissions:
   contents: write
@@ -14,28 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout fork
+      - name: Checkout your fork
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: false
 
-      - name: Set Git identity
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Add upstream remote
+      - name: Add upstream remote (parent repo)
         run: |
           git remote add upstream https://github.com/gethomepage/homepage.git
           git fetch upstream
 
-      - name: Fast-forward merge upstream/main into main
+      - name: Fast-forward your main from upstream/main
         run: |
           git checkout main
-          git merge --ff-only upstream/main || echo "Already up to date"
+          git merge upstream/main --ff-only || echo "Already up to date"
 
-      - name: Push updated main to fork
+      - name: Push updated main back to your fork
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
