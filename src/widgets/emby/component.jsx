@@ -1,9 +1,9 @@
+import { BsCpu, BsFillCpuFill, BsFillPlayFill, BsPauseFill, BsVolumeMuteFill } from "react-icons/bs";
+
 import Block from "components/services/widget/block";
 import Container from "components/services/widget/container";
 import { useTranslation } from "next-i18next";
-import { BsCpu, BsFillCpuFill, BsFillPlayFill, BsPauseFill, BsVolumeMuteFill } from "react-icons/bs";
 import { MdOutlineSmartDisplay } from "react-icons/md";
-
 import { getURLSearchParams } from "utils/proxy/api-helpers";
 import useWidgetAPI from "utils/proxy/use-widget-api";
 
@@ -184,11 +184,11 @@ function TaskEntry({ task }) {
         }}
       />
       <div className="grow text-xs z-10 self-center relative w-full h-4 ml-6">
-        <div className="absolute w-full whitespace-nowrap text-ellipsis overflow-hidden" title={`${task.name} (Task)`}>
-          {`${task.name} (Task)`}
+        <div className="absolute w-full whitespace-nowrap text-ellipsis overflow-hidden" title={`Task: ${task.name}`}>
+          {`Task: ${task.name}`}
         </div>
-      <div className="self-center text-xs flex justify-end mr-6 z-10">{`${task.progress.toFixed(2)}%`}</div>
       </div>
+      <div className="self-center text-xs flex justify-end mr-6 z-10">{`${task.progress.toFixed(2)}%`}</div>
     </div>
   );
 }
@@ -225,7 +225,7 @@ export default function Component({ service }) {
 
   const { widget } = service;
   const enableNowPlaying = service.widget?.enableNowPlaying ?? true;
-  const enableTaskDisplay = service.widget?.enableTaskDisplay ?? true;
+  const enableTaskDisplay = service.widget?.enableTaskDisplay ?? false;
 
   const {
     data: sessionsData,
@@ -247,8 +247,6 @@ export default function Component({ service }) {
   });
 
   let runningTasks = mapTaskResult(taskData);
-
-  console.log('runningTasks in component', runningTasks);
 
   async function handlePlayCommand(session, command) {
     const params = getURLSearchParams(widget, command);
@@ -400,8 +398,6 @@ const mapTaskResult = (result) => {
   const runningState = "Running";
 
   const runningTasks = result?.filter(task => task.State === runningState) || [];
-
-  console.log('runningTasks', runningTasks);
 
   const mappedRuningTasks = runningTasks.map(task => ({
     id: task.Id,
