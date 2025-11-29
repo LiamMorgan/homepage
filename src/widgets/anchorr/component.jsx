@@ -43,13 +43,11 @@ export default function Component({ service }) {
 }
 
 const formatStatusResult = (result) => {
-  const status = result?.isBotRunning;
+  const isBotRunning = result?.bot?.running;
 
-  if (status === true || status === "true") {
+  if (isBotRunning) {
     return "Running";
-  } else if (status === false || status === "false") {
-    return "Stopped";
   }
 
-  return "Unknown";
+  return "Stopped";
 }

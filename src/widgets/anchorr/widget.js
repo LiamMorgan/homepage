@@ -6,7 +6,7 @@ const widget = {
 
   mappings: {
     status: {
-      endpoint: "status"
+      endpoint: "health"
     }
   },
 };
