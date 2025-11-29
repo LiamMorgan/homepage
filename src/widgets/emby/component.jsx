@@ -174,6 +174,27 @@ function SessionEntry({ playCommand, session, enableUser, showEpisodeNumber, ena
   );
 }
 
+function TaskEntry({ task }) {
+  const progress = task.progress || 0;
+
+  return (
+    <div className="text-theme-700 dark:text-theme-200 relative h-5 w-full rounded-md bg-theme-200/50 dark:bg-theme-900/20 mt-1 flex">
+      <div
+        className="absolute h-5 rounded-md bg-theme-200 dark:bg-theme-900/40 z-0"
+        style={{
+          width: `${progress}%`,
+        }}
+      />
+      <div className="grow text-xs z-10 self-center relative w-full h-4 ml-1">
+        <div className="absolute w-full whitespace-nowrap text-ellipsis overflow-hidden" title={`Task: ${task.name}`}>
+          {`Task: ${task.name}`}
+        </div>
+      </div>
+      <div className="self-center text-xs flex justify-end mr-6 z-10">{`${progress.toFixed(2)}%`}</div>
+    </div>
+  );
+}
+
 function CountBlocks({ service, countData }) {
   const { t } = useTranslation();
   // allows filtering
@@ -206,6 +227,7 @@ export default function Component({ service }) {
 
   const { widget } = service;
   const enableNowPlaying = service.widget?.enableNowPlaying ?? true;
+  const enableTaskDisplay = service.widget?.enableTaskDisplay ?? false;
 
   const {
     data: sessionsData,
@@ -215,9 +237,18 @@ export default function Component({ service }) {
     refreshInterval: enableNowPlaying ? 5000 : undefined,
   });
 
+  const {
+    data: taskData,
+    error: taskError
+  } = useWidgetAPI(widget, enableTaskDisplay ? "Tasks" : "", {
+    refreshInterval: enableTaskDisplay ? 60000 : undefined,
+  });
+
   const { data: countData, error: countError } = useWidgetAPI(widget, "Count", {
     refreshInterval: 60000,
   });
+
+  let runningTasks = mapTaskResult(taskData);
 
   async function handlePlayCommand(session, command) {
     const params = getURLSearchParams(widget, command);
@@ -235,8 +266,10 @@ export default function Component({ service }) {
     });
   }
 
-  if (sessionsError || countError) {
-    return <Container service={service} error={sessionsError ?? countError} />;
+  if (sessionsError || countError || taskError) {
+    const error = sessionsError || countError || taskError;
+
+    return <Container service={service} error={error} />;
   }
 
   const enableBlocks = service.widget?.enableBlocks;
@@ -259,8 +292,14 @@ export default function Component({ service }) {
                 <span className="absolute left-2 text-xs mt-[2px]">-</span>
               </div>
             )}
+            {runningTasks.map((task) => (
+                <TaskEntry
+                  key={task.Id}
+                  task={task}
+                />
+              ))}
           </div>
-        )}
+        ) }
       </>
     );
   }
@@ -291,6 +330,12 @@ export default function Component({ service }) {
                 <span className="absolute left-2 text-xs mt-[2px]">-</span>
               </div>
             )}
+            {runningTasks.map((task) => (
+                <TaskEntry
+                  key={task.Id}
+                  task={task}
+                />
+              ))}
           </div>
         </>
       );
@@ -309,6 +354,12 @@ export default function Component({ service }) {
               showEpisodeNumber={showEpisodeNumber}
               enableMediaControl={enableMediaControl}
             />
+            {runningTasks.map((task) => (
+                <TaskEntry
+                  key={task.Id}
+                  task={task}
+                />
+              ))}
           </div>
         </>
       );
@@ -328,6 +379,13 @@ export default function Component({ service }) {
               enableMediaControl={enableMediaControl}
             />
           ))}
+
+          {runningTasks.map((task) => (
+              <TaskEntry
+                key={task.Id}
+                task={task}
+              />
+            ))}
         </div>
       </>
     );
@@ -337,3 +395,17 @@ export default function Component({ service }) {
     return <CountBlocks service={service} countData={countData} />;
   }
 }
+
+const mapTaskResult = (result) => {
+  const runningState = "Running";
+
+  const runningTasks = result?.filter(task => task.State === runningState) || [];
+
+  const mappedRuningTasks = runningTasks.map(task => ({
+    id: task.Id,
+    name: task.Name,
+    progress: task.CurrentProgressPercentage,
+  }));
+
+  return mappedRuningTasks;
+};

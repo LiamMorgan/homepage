@@ -21,6 +21,9 @@ const widget = {
       endpoint: "Sessions/{sessionId}/Playing/Pause",
       segments: ["sessionId"],
     },
+    Tasks: {
+      endpoint: "ScheduledTasks",
+    },
   },
 };
 
