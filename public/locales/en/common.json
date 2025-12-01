@@ -273,13 +273,13 @@
         "available": "Available"
     },
     "jellyseerr": {
+        "movies": "Movies",
+        "series": "Series",
+        "total": "Total",
         "pending": "Pending",
         "approved": "Approved",
         "available": "Available",
         "processing": "Processing",
-        "series": "Series",
-        "movie": "Movies",
-        "total": "Total",
         "issues": "Open Issues"
     },
     "overseerr": {

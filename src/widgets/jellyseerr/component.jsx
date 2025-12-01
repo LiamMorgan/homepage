@@ -20,13 +20,13 @@ export default function Component({ service }) {
   if (!statsData || (isIssueEnabled && !issueData)) {
     return (
       <Container service={service}>
-        <Block label="jellyseerr.processing" />
+        <Block label="jellyseerr.movies" />
         <Block label="jellyseerr.series" />
-        <Block label="jellyseerr.movie" />
+        <Block label="jellyseerr.total" />
         <Block label="jellyseerr.pending" />
         <Block label="jellyseerr.approved" />
         <Block label="jellyseerr.available" />
-        <Block label="jellyseerr.total" />
+        <Block label="jellyseerr.processing" />
         <Block label="jellyseerr.issues" />
       </Container>
     );
@@ -34,8 +34,8 @@ export default function Component({ service }) {
 
   return (
     <Container service={service}>
+      <Block label="jellyseerr.movies" value={statsData.movie} />
       <Block label="jellyseerr.series" value={statsData.tv} />
-      <Block label="jellyseerr.movie" value={statsData.movie} />
       <Block label="jellyseerr.total" value={statsData.total} />
       <Block label="jellyseerr.pending" value={statsData.pending} />
       <Block label="jellyseerr.approved" value={statsData.approved} />
