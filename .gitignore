@@ -52,3 +52,5 @@ site*/
 
 # venv
 .venv/
+/.github/workflows/docker-publish.yml
+/.github/workflows/docs-publish.yml
