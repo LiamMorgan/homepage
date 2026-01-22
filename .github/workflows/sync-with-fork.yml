@@ -24,14 +24,17 @@ jobs:
           git fetch upstream --prune
 
       #####################################################
-      # Sync MAIN
+      # Sync MAIN (rebase)
       #####################################################
-      - name: Fast-forward main from upstream/main
-        continue-on-error: true
+      - name: Rebase main onto upstream/main
         run: |
           if git rev-parse --verify upstream/main >/dev/null 2>&1; then
             git checkout main
-            git merge upstream/main --ff-only || echo "main already up to date"
+            if ! git rebase upstream/main; then
+              echo "Rebase failed; aborting."
+              git rebase --abort
+              exit 1
+            fi
           else
             echo "Upstream main not found"
           fi
@@ -40,23 +43,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin main || echo "Nothing to push for main"
-
-      #####################################################
-      # Sync DEV
-      #####################################################
-      - name: Fast-forward dev from upstream/dev
-        continue-on-error: true
-        run: |
-          if git rev-parse --verify upstream/dev >/dev/null 2>&1; then
-            git checkout dev
-            git merge upstream/dev --ff-only || echo "dev already up to date"
-          else
-            echo "Upstream dev branch does not exist. Skipping."
-          fi
-
-      - name: Push updated dev
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git push origin dev || echo "Nothing to push for dev"
+          git push --force-with-lease origin main || echo "Nothing to push for main"
