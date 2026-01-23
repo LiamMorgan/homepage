@@ -22,7 +22,6 @@ jobs:
         run: |
           git remote add upstream https://github.com/gethomepage/homepage.git
           git fetch upstream --prune
-
       #####################################################
       # Sync MAIN (rebase)
       #####################################################
@@ -38,7 +37,6 @@ jobs:
           else
             echo "Upstream main not found"
           fi
-
       - name: Push updated main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
