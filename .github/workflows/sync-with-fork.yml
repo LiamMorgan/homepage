@@ -3,7 +3,7 @@ name: Sync Fork With Upstream
 on:
   schedule:
     - cron: "0 0 * * *" # Daily at midnight UTC
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,10 +18,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git identity (required for rebase)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Add upstream remote (parent repo)
         run: |
           git remote add upstream https://github.com/gethomepage/homepage.git
           git fetch upstream --prune
+
       #####################################################
       # Sync MAIN (rebase)
       #####################################################
@@ -37,6 +43,7 @@ jobs:
           else
             echo "Upstream main not found"
           fi
+
       - name: Push updated main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
