@@ -197,9 +197,6 @@ function TaskEntry({ task }) {
 
 function CountBlocks({ service, countData }) {
   const { t } = useTranslation();
-  // allows filtering
-  // eslint-disable-next-line no-param-reassign
-  if (service.widget?.type === "jellyfin") service.widget.type = "emby";
 
   if (!countData) {
     return (

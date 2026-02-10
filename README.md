@@ -16,6 +16,8 @@
 <p align="center">
   <a href="https://github.com/gethomepage/homepage/actions/workflows/docker-publish.yml"><img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/gethomepage/homepage/docker-publish.yml"></a>
   &nbsp;
+  <a href="https://codecov.io/gh/gethomepage/homepage"><img src="https://codecov.io/gh/gethomepage/homepage/graph/badge.svg?token=7SKFL4D9K7"/></a>
+  &nbsp;
   <a href="https://crowdin.com/project/gethomepage" target="_blank"><img src="https://badges.crowdin.net/gethomepage/localized.svg"></a>
   &nbsp;
   <a href="https://discord.gg/k4ruYNrudu"><img alt="Discord" src="https://img.shields.io/discord/1019316731635834932"></a>
@@ -154,16 +156,16 @@ This is a [Next.js](https://nextjs.org/) application, see their documentation fo
 
 The homepage documentation is available at [https://gethomepage.dev/](https://gethomepage.dev/).
 
-Homepage uses Material for MkDocs for documentation. To run the documentation locally, first install the dependencies:
+Homepage uses Zensical for documentation. To run the documentation locally, first install the dependencies:
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 Then run the development server:
 
 ```bash
-mkdocs serve # or build, to build the static site
+uv run zensical serve # or build, to build the static site
 ```
 
 # Support & Suggestions

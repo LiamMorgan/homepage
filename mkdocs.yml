@@ -34,6 +34,7 @@ nav:
           - widgets/services/adguard-home.md
           - widgets/services/anchorr.md
           - widgets/services/apcups.md
+          - widgets/services/arcane.md
           - widgets/services/argocd.md
           - widgets/services/atsumeru.md
           - widgets/services/audiobookshelf.md
@@ -57,6 +58,8 @@ nav:
           - widgets/services/deluge.md
           - widgets/services/develancacheui.md
           - widgets/services/diskstation.md
+          - widgets/services/dispatcharr.md
+          - widgets/services/dockhand.md
           - widgets/services/downloadstation.md
           - widgets/services/emby.md
           - widgets/services/esphome.md
