@@ -325,6 +325,20 @@
         "stopped": "Stopped",
         "total": "Total"
     },
+    "posterizarr": {
+        "status": "Status",
+        "assets": "Assets",
+        "missing": "Missing",
+        "lastRun": "Last Run"
+    },
+    "anchorr": {
+        "status": "Status"
+    },
+    "wizarr": {
+        "invites": "Invites",
+        "accepted": "Accepted",
+        "expired": "Expired"
+    },
     "suwayomi": {
       "download": "Downloaded",
       "nondownload": "Non-Downloaded",

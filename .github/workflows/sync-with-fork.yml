@@ -1,0 +1,51 @@
+name: Sync Fork With Upstream
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Daily at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git identity (required for rebase)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote (parent repo)
+        run: |
+          git remote add upstream https://github.com/gethomepage/homepage.git
+          git fetch upstream --prune
+
+      #####################################################
+      # Sync MAIN (rebase)
+      #####################################################
+      - name: Rebase main onto upstream/main
+        run: |
+          if git rev-parse --verify upstream/main >/dev/null 2>&1; then
+            git checkout main
+            if ! git rebase upstream/main; then
+              echo "Rebase failed; aborting."
+              git rebase --abort
+              exit 1
+            fi
+          else
+            echo "Upstream main not found"
+          fi
+
+      - name: Push updated main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push --force-with-lease origin main || echo "Nothing to push for main"

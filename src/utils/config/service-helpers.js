@@ -312,6 +312,7 @@ export function cleanServiceGroups(groups) {
           enableBlocks,
           enableNowPlaying,
           enableMediaControl,
+          enableTaskDisplay,
 
           // emby, jellyfin, tautulli, tracearr
           enableUser,
@@ -541,6 +542,7 @@ export function cleanServiceGroups(groups) {
           if (enableMediaControl !== undefined) widget.enableMediaControl = !!JSON.parse(enableMediaControl);
           if (enableBlocks !== undefined) widget.enableBlocks = JSON.parse(enableBlocks);
           if (enableNowPlaying !== undefined) widget.enableNowPlaying = JSON.parse(enableNowPlaying);
+          if (enableTaskDisplay !== undefined) widget.enableTaskDisplay = JSON.parse(enableTaskDisplay);
         }
         if (["emby", "jellyfin", "tautulli", "tracearr"].includes(type)) {
           if (expandOneStreamToTwoRows !== undefined)

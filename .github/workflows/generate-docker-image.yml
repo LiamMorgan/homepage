@@ -1,0 +1,59 @@
+name: Docker Publish
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    tags: [ "v*.*.*" ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # When pushing a Git tag like v1.2.3
+            type=ref,event=tag
+
+            # If pushing to main → latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+            # If pushing to dev → dev
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CI=false
+            BUILDTIME=${{ github.run_started_at }}
+            VERSION=${{ github.ref_name }}
+            REVISION=${{ github.sha }}

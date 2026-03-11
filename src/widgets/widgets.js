@@ -1,4 +1,5 @@
 import adguard from "./adguard/widget";
+import anchorr from "./anchorr/widget";
 import apcups from "./apcups/widget";
 import arcane from "./arcane/widget";
 import argocd from "./argocd/widget";
@@ -99,6 +100,7 @@ import pihole from "./pihole/widget";
 import plantit from "./plantit/widget";
 import plex from "./plex/widget";
 import portainer from "./portainer/widget";
+import posterizarr from "./posterizarr/widget";
 import prometheus from "./prometheus/widget";
 import prometheusmetric from "./prometheusmetric/widget";
 import prowlarr from "./prowlarr/widget";
@@ -147,12 +149,14 @@ import wallos from "./wallos/widget";
 import watchtower from "./watchtower/widget";
 import wgeasy from "./wgeasy/widget";
 import whatsupdocker from "./whatsupdocker/widget";
+import wizarr from "./wizarr/widget";
 import xteve from "./xteve/widget";
 import yourspotify from "./yourspotify/widget";
 import zabbix from "./zabbix/widget";
 
 const widgets = {
   adguard,
+  anchorr,
   apcups,
   arcane,
   argocd,
@@ -258,6 +262,7 @@ const widgets = {
   plantit,
   plex,
   portainer,
+  posterizarr,
   prometheus,
   prometheusmetric,
   prowlarr,
@@ -305,6 +310,7 @@ const widgets = {
   wallos,
   watchtower,
   wgeasy,
+  wizarr,
   whatsupdocker,
   xteve,
   yourspotify,

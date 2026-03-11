@@ -20,12 +20,18 @@ const widget = {
       endpoint: "emby/Sessions/{sessionId}/Playing/Pause?api_key={key}",
       segments: ["sessionId"],
     },
+    Tasks: {
+      endpoint: "ScheduledTasks",
+    },
     // V2 Endpoints
     SessionsV2: {
       endpoint: "Sessions",
     },
     CountV2: {
       endpoint: "Items/Counts",
+    },
+    TasksV2: {
+      endpoint: "ScheduledTasks",
     },
     UnpauseV2: {
       method: "POST",

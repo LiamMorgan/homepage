@@ -8,6 +8,7 @@ search:
 You can also find a list of all available service widgets in the sidebar navigation.
 
 - [Adguard Home](adguard-home.md)
+- [Anchorr](anchorr.md)
 - [APC UPS](apcups.md)
 - [Arcane](arcane.md)
 - [ArgoCD](argocd.md)
@@ -110,6 +111,7 @@ You can also find a list of all available service widgets in the sidebar navigat
 - [Plex & Tautulli](plex-tautulli.md)
 - [Plex](plex.md)
 - [Portainer](portainer.md)
+- [Posterizarr](posterizarr.md)
 - [Prometheus](prometheus.md)
 - [Prometheus Metric](prometheusmetric.md)
 - [Prowlarr](prowlarr.md)
@@ -150,6 +152,7 @@ You can also find a list of all available service widgets in the sidebar navigat
 - [Vikunja](vikunja.md)
 - [Wallos](wallos.md)
 - [Watchtower](watchtower.md)
+- [Wizarr](wizarr.md)
 - [WGEasy](wgeasy.md)
 - [WhatsUpDocker](whatsupdocker.md)
 - [xTeVe](xteve.md)

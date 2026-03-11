@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 
 const components = {
   adguard: dynamic(() => import("./adguard/component")),
+  anchorr: dynamic(() => import("./anchorr/component")),
   apcups: dynamic(() => import("./apcups/component")),
   arcane: dynamic(() => import("./arcane/component")),
   argocd: dynamic(() => import("./argocd/component")),
@@ -110,6 +111,7 @@ const components = {
   plantit: dynamic(() => import("./plantit/component")),
   plex: dynamic(() => import("./plex/component")),
   portainer: dynamic(() => import("./portainer/component")),
+  posterizarr: dynamic(() => import("./posterizarr/component")),
   prometheus: dynamic(() => import("./prometheus/component")),
   prometheusmetric: dynamic(() => import("./prometheusmetric/component")),
   prowlarr: dynamic(() => import("./prowlarr/component")),
@@ -156,6 +158,7 @@ const components = {
   wallos: dynamic(() => import("./wallos/component")),
   watchtower: dynamic(() => import("./watchtower/component")),
   wgeasy: dynamic(() => import("./wgeasy/component")),
+  wizarr: dynamic(() => import("./wizarr/component")),
   whatsupdocker: dynamic(() => import("./whatsupdocker/component")),
   xteve: dynamic(() => import("./xteve/component")),
   yourspotify: dynamic(() => import("./yourspotify/component")),

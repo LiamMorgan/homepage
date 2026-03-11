@@ -16,6 +16,7 @@ widget:
   key: apikeyapikeyapikeyapikeyapikey
   enableBlocks: true # optional, defaults to false
   enableNowPlaying: true # optional, defaults to true
+  enableTaskDisplay: false # optional, defaults to false
   enableUser: true # optional, defaults to false
   enableMediaControl: false # optional, defaults to true
   showEpisodeNumber: true # optional, defaults to false
