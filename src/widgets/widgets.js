@@ -139,6 +139,7 @@ import trilium from "./trilium/widget";
 import truenas from "./truenas/widget";
 import tubearchivist from "./tubearchivist/widget";
 import unifi from "./unifi/widget";
+import unifi_drive from "./unifi_drive/widget";
 import unmanic from "./unmanic/widget";
 import unraid from "./unraid/widget";
 import uptimekuma from "./uptimekuma/widget";
@@ -301,6 +302,7 @@ const widgets = {
   truenas,
   unifi,
   unifi_console: unifi,
+  unifi_drive,
   unmanic,
   unraid,
   uptimekuma,
